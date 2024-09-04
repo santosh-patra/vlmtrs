@@ -13,18 +13,21 @@ export const fetchAllVendorModel = async (fields) => {
     console.log("Data received in fetchAllVendorModel --->", fields);
 
     try {
-        const result = await Vendor.findAll(
-        //     {
-        //     attributes: { exclude: ['product_single_image','product_multiple_image'] }
-        //   }
-        );
+        const result = await Vendor.findAll();
+        let allVendor = []
         let totalVendorCount = await Vendor.count();
         if (result.length > 0) {
+            result.forEach(res=>{
+                if(res.dataValues.address){
+                    res.dataValues.address = JSON.parse(res.dataValues.address);
+                }
+                allVendor.push(res.dataValues)
+            })
             return ({
                 success: true,
                 message: "Vendor Fetch successfully",
                 totalVendor:totalVendorCount,
-                data: result
+                data: allVendor
             })
         }
         else {
