@@ -49,9 +49,9 @@ const Vendor = sequelize.define('Vendor', {
                 order: [['createdAt', 'DESC']]
             });
 
-            let newId = 100;  // Starting ID
-            if (latestVendor && latestVendor.vendor_id) {
-                const latestId = parseInt(latestVendor.vendor_id.split('_')[1], 10);
+            let newId = 0;  // Starting ID
+            if (latestVendor && latestVendor.id) {
+                const latestId = parseInt(latestVendor.id, 10);
                 newId = latestId + 1;
             }
             vendor.vendor_id = `VNDR_${newId}`;
