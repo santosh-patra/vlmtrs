@@ -85,9 +85,13 @@ export const addNewVendorModel = async (fields) => {
     console.log("Data received in fetchAllVendorModel --->", fields);
 
     try {
+        fields.address = JSON.stringify(fields.address)
         let result = await Vendor.create(fields);
         console.log("create Vendor result--->",result)
         if(result.uniqno == 1){
+            if(result.dataValues.address){
+                result.dataValues.address = JSON.parse(result.dataValues.address)
+            }
             return ({
                 success: true,
                 message: "A New Vendor has been created Successfully",
