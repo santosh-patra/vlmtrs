@@ -1,21 +1,21 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/mysqlconfig.js';
 
-const Vendor = sequelize.define('Vendor', {
+const Dealer = sequelize.define('Dealer', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    vendor_id: {
+    dealer_id: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
     name: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    address: {
+    location: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -23,11 +23,7 @@ const Vendor = sequelize.define('Vendor', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    phone_no: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    batch_no: {
+    phone_number: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -41,28 +37,27 @@ const Vendor = sequelize.define('Vendor', {
         defaultValue: DataTypes.NOW,
         allowNull: false
     }
-
 }, {
     hooks: {
-        beforeCreate: async (vendor, options) => {
-            // const latestVendor = await Vendor.findOne({
+        beforeCreate: async (dealer, options) => {
+            // const latestDealer = await Dealer.findOne({
             //     order: [['createdAt', 'DESC']]
             // });
 
             // let newId = 0;  // Starting ID
-            // if (latestVendor && latestVendor.id) {
-            //     const latestId = parseInt(latestVendor.id, 10);
+            // if (latestDealer && latestDealer.id) {
+            //     const latestId = parseInt(latestDealer.id, 10);
             //     newId = latestId + 1;
             // }
-            // vendor.vendor_id = `VNDR_${newId}`;
+            // dealer.dealer_id = `DLR${newId}`;
         },
-        afterCreate: async (vendor, options) => {
-            let existingSpare = await Vendor.findOne({ where: { id:vendor.id } });
-            vendor.vendor_id = `VNDR_${vendor.id}`;
-            let updateRes = await existingSpare.update(vendor.dataValues);
+        afterCreate: async(dealer, options) => {
+            let existingSpare = await Dealer.findOne({ where: { id:dealer.id } });
+            dealer.dealer_id = `DLR_${dealer.id}`;
+            let updateRes = await existingSpare.update(dealer.dataValues);
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding
 });
 
-export default Vendor;
+export default Dealer;

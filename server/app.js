@@ -5,6 +5,7 @@ const app = express();
 import { fileURLToPath } from 'url';
 // import productRoutes from '../routes/productroutes.js';
 import vendorRoutes from '../routes/vendorRoutes.js';
+import spareRoutes from '../routes/spareRoutes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import jwt from 'jsonwebtoken'
@@ -20,6 +21,7 @@ app.use(cors())
 // console.log("dhgcdhc--->",path.basename(__filename));
 // app.use('/v1/product', productRoutes)
 app.use('/v1/vendor', vendorRoutes)
+app.use('/v1/spare', spareRoutes)
 
 
 app.get('/', (req, res) => {

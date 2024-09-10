@@ -1,42 +1,58 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/mysqlconfig.js';
 
-const Spare = sequelize.define('Spare', {
+const Vehicle = sequelize.define('Vehicle', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    spare_id: {
+    vehicle_id: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
-    vendor_id: {
+    dealer_id: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: 'Please Provide Vendor ID'
+                msg: 'Please Provide Dealer ID'
             }
         }
     },
-    name: {
+    vin: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    description: {
+    chassis_no: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    part_number: {
+    motor_no: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    unit_cost: {
+    battery_no: {
         type: DataTypes.STRING,
         allowNull: true
     },
-    lead_time: {
+    color_code: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    mfg_date: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    model_name: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    barcode: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    batch_no: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -52,26 +68,25 @@ const Spare = sequelize.define('Spare', {
     }
 }, {
     hooks: {
-        beforeCreate: async (spare, options) => {
-            // const latestSpare = await Spare.findOne({
+        beforeCreate: async (vehicle, options) => {
+            // const latestVehicle = await Vehicle.findOne({
             //     order: [['createdAt', 'DESC']]
             // });
-            // console.log("latestSpare--->",latestSpare)
 
-            // let newId = 1;  // Starting ID
-            // if (latestSpare && latestSpare.id) {
-            //     const latestId = parseInt(latestSpare.id);
+            // let newId = 0;  // Starting ID
+            // if (latestVehicle && latestVehicle.id) {
+            //     const latestId = parseInt(latestVehicle.id, 10);
             //     newId = latestId + 1;
             // }
-            // spare.spare_id = `SPR_${spare.id}`;
+            // vehicle.vehicle_id = `VHL${newId}`;
         },
-        afterCreate: async (spare, options) => {
-            let existingSpare = await Spare.findOne({ where: { id:spare.id } });
-            spare.spare_id = `SPR_${spare.id}`;
-            let updateRes = await existingSpare.update(spare.dataValues);
+        afterCreate: async(vehicle, options) => {
+            let existingSpare = await Vehicle.findOne({ where: { id:vehicle.id } });
+            vehicle.vehicle_id = `VHL_${vehicle.id}`;
+            let updateRes = await existingSpare.update(vehicle.dataValues);
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding
 });
 
-export default Spare;
+export default Vehicle;

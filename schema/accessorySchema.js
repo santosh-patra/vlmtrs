@@ -1,15 +1,15 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/mysqlconfig.js';
 
-const Spare = sequelize.define('Spare', {
+const Accessory = sequelize.define('Accessory', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    spare_id: {
+    accessory_id: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
     vendor_id: {
         type: DataTypes.STRING,
@@ -25,10 +25,6 @@ const Spare = sequelize.define('Spare', {
         allowNull: true
     },
     description: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    part_number: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -52,26 +48,25 @@ const Spare = sequelize.define('Spare', {
     }
 }, {
     hooks: {
-        beforeCreate: async (spare, options) => {
-            // const latestSpare = await Spare.findOne({
+        beforeCreate: async (accessory, options) => {
+            // const latestAccessory = await Accessory.findOne({
             //     order: [['createdAt', 'DESC']]
             // });
-            // console.log("latestSpare--->",latestSpare)
 
-            // let newId = 1;  // Starting ID
-            // if (latestSpare && latestSpare.id) {
-            //     const latestId = parseInt(latestSpare.id);
+            // let newId = 0;  // Starting ID
+            // if (latestAccessory && latestAccessory.id) {
+            //     const latestId = parseInt(latestAccessory.id, 10);
             //     newId = latestId + 1;
             // }
-            // spare.spare_id = `SPR_${spare.id}`;
+            // accessory.accessory_id = `ACS${newId}`;
         },
-        afterCreate: async (spare, options) => {
-            let existingSpare = await Spare.findOne({ where: { id:spare.id } });
-            spare.spare_id = `SPR_${spare.id}`;
-            let updateRes = await existingSpare.update(spare.dataValues);
+        afterCreate: async(accessory, options) => {
+            let existingSpare = await Accessory.findOne({ where: { id:accessory.id } });
+            accessory.accessory_id = `ACS_${accessory.id}`;
+            let updateRes = await existingSpare.update(accessory.dataValues);
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding
 });
 
-export default Spare;
+export default Accessory;

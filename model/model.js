@@ -1,6 +1,7 @@
 import { Op, Sequelize } from "sequelize";
 import { errorResponse } from "../config/errorResponse.js";
 import Vendor from "../schema/vendorSchema.js";
+import Spare from "../schema/spareSchema.js";
 
 
 
@@ -8,7 +9,7 @@ import Vendor from "../schema/vendorSchema.js";
 
 
 
-// product model
+// Vendor model
 export const fetchAllVendorModel = async (fields) => {
     console.log("Data received in fetchAllVendorModel --->", fields);
 
@@ -184,7 +185,7 @@ export const deleteVendorModel = async (fields) => {
     try {
         // check the Vendor is exist or not
         let id = fields.vendor_id;
-        const result = await Vendor.findOne({vendor_id:id});
+        const result = await Vendor.findOne({where:{vendor_id:id}});
         console.log("Vendor Result--->",result)
         if(result){
             let deleteRes = await result.destroy();
@@ -199,6 +200,182 @@ export const deleteVendorModel = async (fields) => {
                 success: false,
                 message: "Fail !! No Vendor Found",
                 error: errorResponse(1, 'Unable to Delete Vendor Details', result)
+            })
+        }
+
+    } catch (error) {
+        console.log("error occured in deleteVendorModel--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
+
+// Spare Model
+export const fetchAllSpareModel = async (fields) => {
+    console.log("Data received in fetchAllSpareModel --->", fields);
+
+    try {
+        const result = await Spare.findAll();
+        let allSpare = []
+        if (result.length > 0) {
+            result.forEach(res=>{
+                // if(res.dataValues.address){
+                //     res.dataValues.address = JSON.parse(res.dataValues.address);
+                // }
+                allSpare.push(res.dataValues)
+            })
+            return ({
+                success: true,
+                message: "Spare Fetch successfully",
+                data: allSpare
+            })
+        }
+        else {
+            return ({
+                success: false,
+                message: "Fail ! No Record Found",
+                error: result
+            })
+        }
+    } catch (error) {
+        console.log("error occured in fetchAllSpare Model--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
+
+export const fetchSingleSpareModel = async (fields) => {
+    console.log("Data received in fetchSingleSpareModel --->", fields);
+    try {
+        let result = await Spare.findOne({ where: { spare_id:fields.spare_id } });
+        console.log("Fetch Single Spare result--->",result);
+        if (result) {
+            // if(result.address){
+            //     result.address = JSON.parse(result.address)
+            // }
+            return ({
+                success: true,
+                message: "Spare Details fetch Successfully",
+                data: result.dataValues
+            })
+        }
+        else {
+            return ({
+                success: false,
+                message: "Fail ! No Record Found",
+                error: result
+            })
+        }
+
+
+    } catch (error) {
+        console.log("error occured in fetchSingleSpareModel--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
+
+export const addNewSpareModel = async (fields) => {
+    console.log("Data received in fetchAllSpareModel --->", fields);
+
+    try {
+        let result = await Spare.create(fields);
+        console.log("create Spare result--->",result)
+        if(result.uniqno == 1){
+            return ({
+                success: true,
+                message: "A New Spare has been Added Successfully",
+                data: result.dataValues
+            })
+        }
+        else{
+            return ({
+                success: false,
+                message: "Something Went Wrong...Please try again",
+                error: errorResponse(1, 'Unable to Add Spare Details', result)
+            })
+        }
+        
+
+    } catch (error) {
+        console.log("error occured in addNewSpare Model--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
+
+export const updateSpareModel = async (fields) => {
+    console.log("Data received in updateSpareModel --->", fields);
+
+    try {
+        let existingSpare = await Spare.findOne({ where: { spare_id:fields.spare_id } });
+        if(existingSpare){
+            console.log("existingSpare Result--->",existingSpare.dataValues)
+            let updateObj = {};
+            updateObj.vendor_id = fields.vendor_id ? fields.vendor_id : existingSpare.vendor_id
+            updateObj.name = fields.name ? fields.name : existingSpare.name
+            updateObj.description = fields.description ? fields.description : existingSpare.description
+            updateObj.part_number = fields.part_number ? fields.part_number : existingSpare.part_number
+            updateObj.unit_cost = fields.unit_cost ? fields.unit_cost : existingSpare.unit_cost
+            updateObj.lead_time = fields.lead_time ? fields.lead_time : existingSpare.lead_time
+            let updateRes = await existingSpare.update(updateObj);
+            
+            return ({
+                success: true,
+                message: "Spare updated Successfully",
+                data: updateRes.dataValues
+            })
+        }
+        else {
+            return ({
+                success: false,
+                message: "Fail !! No Spare Found",
+                error: errorResponse(1, 'Unable to Update Spare Details', existingSpare)
+            })
+        }
+        
+
+    } catch (error) {
+        console.log("error occured in updateSpareModel--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
+
+export const deleteSpareModel = async (fields) => {
+    try {
+        // check the Spare is exist or not
+        let id = fields.spare_id;
+        const result = await Spare.findOne({where:{spare_id:id}});
+        console.log("Spare Result--->",result)
+        if(result){
+            let deleteRes = await result.destroy();
+            return ({
+                success: true,
+                message: "Spare Deleted Successfully",
+                data: []
+            })
+        }
+        else {
+            return ({
+                success: false,
+                message: "Fail !! No Spare Found",
+                error: errorResponse(1, 'Unable to Delete Spare Details', result)
             })
         }
 
