@@ -6,6 +6,10 @@ import { fileURLToPath } from 'url';
 // import productRoutes from '../routes/productroutes.js';
 import vendorRoutes from '../routes/vendorRoutes.js';
 import spareRoutes from '../routes/spareRoutes.js';
+import accessoryRoutes from '../routes/accessoryRoutes.js';
+import vehicleRoutes from '../routes/vehicleRoutes.js';
+import serviceRoutes from '../routes/serviceRoutes.js';
+import dealerRoutes from '../routes/dealerRoutes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import jwt from 'jsonwebtoken'
@@ -22,6 +26,10 @@ app.use(cors())
 // app.use('/v1/product', productRoutes)
 app.use('/v1/vendor', vendorRoutes)
 app.use('/v1/spare', spareRoutes)
+app.use('/v1/accessory', accessoryRoutes)
+app.use('/v1/vehicle', vehicleRoutes)
+app.use('/v1/service', serviceRoutes)
+app.use('/v1/dealer', dealerRoutes)
 
 
 app.get('/', (req, res) => {

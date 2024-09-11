@@ -9,7 +9,8 @@ const Service = sequelize.define('Service', {
     },
     service_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: null,
+        allowNull: true
     },
     dealer_id: {
         type: DataTypes.STRING,
@@ -17,6 +18,13 @@ const Service = sequelize.define('Service', {
         validate: {
             notEmpty: {
                 msg: 'Please Provide Dealer ID'
+            },
+            isAlphanumeric: {
+                msg: 'Dealer ID must be alphanumeric'
+            },
+            len: {
+                args: [3, 10],
+                msg: 'Dealer ID must be between 3 and 10 characters'
             }
         }
     },
@@ -26,6 +34,13 @@ const Service = sequelize.define('Service', {
         validate: {
             notEmpty: {
                 msg: 'Please Provide Vehicle ID'
+            },
+            isAlphanumeric: {
+                msg: 'Vehicle ID must be alphanumeric'
+            },
+            len: {
+                args: [3, 10],
+                msg: 'Vehicle ID must be between 3 and 10 characters'
             }
         }
     },
@@ -66,9 +81,11 @@ const Service = sequelize.define('Service', {
             // service.service_id = `SVR${newId}`;
         },
         afterCreate: async(service, options) => {
-            let existingSpare = await Service.findOne({ where: { id:service.id } });
-            service.service_id = `SVR_${service.id}`;
-            let updateRes = await existingSpare.update(service.dataValues);
+            // let existingSpare = await Service.findOne({ where: { id:service.id } });
+            // service.service_id = `SVR_${service.id}`;
+            // let updateRes = await existingSpare.update(service.dataValues);
+            const updatedServiceId = `SVR_${service.id}`;
+            await service.update({ service_id: updatedServiceId });
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding

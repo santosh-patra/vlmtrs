@@ -9,6 +9,7 @@ const Vendor = sequelize.define('Vendor', {
     },
     vendor_id: {
         type: DataTypes.STRING,
+        defaultValue: null,
         allowNull: true
     },
     name: {
@@ -57,9 +58,11 @@ const Vendor = sequelize.define('Vendor', {
             // vendor.vendor_id = `VNDR_${newId}`;
         },
         afterCreate: async (vendor, options) => {
-            let existingSpare = await Vendor.findOne({ where: { id:vendor.id } });
-            vendor.vendor_id = `VNDR_${vendor.id}`;
-            let updateRes = await existingSpare.update(vendor.dataValues);
+            // let existingSpare = await Vendor.findOne({ where: { id:vendor.id } });
+            // vendor.vendor_id = `VNDR_${vendor.id}`;
+            // let updateRes = await existingSpare.update(vendor.dataValues);
+            const updatedVendorId = `VNDR_${vendor.id}`;
+            await vendor.update({ vendor_id: updatedVendorId });
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding

@@ -9,7 +9,8 @@ const Dealer = sequelize.define('Dealer', {
     },
     dealer_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: null,
+        allowNull: true
     },
     name: {
         type: DataTypes.STRING,
@@ -52,9 +53,11 @@ const Dealer = sequelize.define('Dealer', {
             // dealer.dealer_id = `DLR${newId}`;
         },
         afterCreate: async(dealer, options) => {
-            let existingSpare = await Dealer.findOne({ where: { id:dealer.id } });
-            dealer.dealer_id = `DLR_${dealer.id}`;
-            let updateRes = await existingSpare.update(dealer.dataValues);
+            // let existingSpare = await Dealer.findOne({ where: { id:dealer.id } });
+            // dealer.dealer_id = `DLR_${dealer.id}`;
+            // let updateRes = await existingSpare.update(dealer.dataValues);
+            const updatedDealerId = `DLR_${dealer.id}`;
+            await dealer.update({ dealer_id: updatedDealerId });
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding

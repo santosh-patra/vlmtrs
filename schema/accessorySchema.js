@@ -9,7 +9,8 @@ const Accessory = sequelize.define('Accessory', {
     },
     accessory_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: null,
+        allowNull: true
     },
     vendor_id: {
         type: DataTypes.STRING,
@@ -17,6 +18,13 @@ const Accessory = sequelize.define('Accessory', {
         validate: {
             notEmpty: {
                 msg: 'Please Provide Vendor ID'
+            },
+            isAlphanumeric: {
+                msg: 'Vendor ID must be alphanumeric'
+            },
+            len: {
+                args: [3, 10],
+                msg: 'Vendor ID must be between 3 and 10 characters'
             }
         }
     },
@@ -61,9 +69,8 @@ const Accessory = sequelize.define('Accessory', {
             // accessory.accessory_id = `ACS${newId}`;
         },
         afterCreate: async(accessory, options) => {
-            let existingSpare = await Accessory.findOne({ where: { id:accessory.id } });
-            accessory.accessory_id = `ACS_${accessory.id}`;
-            let updateRes = await existingSpare.update(accessory.dataValues);
+            const updatedAccessoryId = `ACS_${accessory.id}`;
+            await accessory.update({ accessory_id: updatedAccessoryId });
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding

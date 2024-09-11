@@ -9,7 +9,8 @@ const Vehicle = sequelize.define('Vehicle', {
     },
     vehicle_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: null,
+        allowNull: true
     },
     dealer_id: {
         type: DataTypes.STRING,
@@ -17,6 +18,13 @@ const Vehicle = sequelize.define('Vehicle', {
         validate: {
             notEmpty: {
                 msg: 'Please Provide Dealer ID'
+            },
+            isAlphanumeric: {
+                msg: 'Dealer ID must be alphanumeric'
+            },
+            len: {
+                args: [3, 10],
+                msg: 'Dealer ID must be between 3 and 10 characters'
             }
         }
     },
@@ -81,9 +89,11 @@ const Vehicle = sequelize.define('Vehicle', {
             // vehicle.vehicle_id = `VHL${newId}`;
         },
         afterCreate: async(vehicle, options) => {
-            let existingSpare = await Vehicle.findOne({ where: { id:vehicle.id } });
-            vehicle.vehicle_id = `VHL_${vehicle.id}`;
-            let updateRes = await existingSpare.update(vehicle.dataValues);
+            // let existingSpare = await Vehicle.findOne({ where: { id:vehicle.id } });
+            // vehicle.vehicle_id = `VHL_${vehicle.id}`;
+            // let updateRes = await existingSpare.update(vehicle.dataValues);
+            const updatedVehicleId = `VHL_${vehicle.id}`;
+            await vehicle.update({ vehicle_id: updatedVehicleId });
         }
     },
     timestamps: true  // This is the default setting, so you can omit it if not overriding

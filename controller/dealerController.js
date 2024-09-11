@@ -1,17 +1,16 @@
 import { errorResponse } from "../config/errorResponse.js";
-import { addNewSpareModel, deleteSpareModel, fetchAllSpareModel, fetchSingleSpareModel, updateSpareModel } from "../model/model.js";
+import { addNewDealerModel, deleteDealerModel, fetchAllDealerModel, fetchSingleDealerModel, updateDealerModel } from "../model/model.js";
 
 
-export const fetchSpareController = async (req, res) => {
+export const fetchDealerController = async (req, res) => {
     try {
-        console.log("Request Body Received in fetchSpareController",req.body);
-        let result = await fetchAllSpareModel(req.body);
+        console.log("Request Body Received in fetchDealerController",req.body);
+        let result = await fetchAllDealerModel(req.body);
         console.log("Result--->", result)
         if(result.success){
             res.status(200).send({
                 success:true,
                 message:result.message,
-                // totalVendor:result.totalVendor,
                 data:result.data
             })
         }
@@ -23,7 +22,7 @@ export const fetchSpareController = async (req, res) => {
             })
         }
     } catch (error) {
-        console.log("error occured in fetchSpareController--->", error)
+        console.log("error occured in fetchDealerController--->", error)
         res.status(200).send({
             success:false,
             message:"Something Went Wrong... Please try again",
@@ -32,12 +31,12 @@ export const fetchSpareController = async (req, res) => {
     }
     
 }
-export const fetchSingleSpareController = async (req, res) => {
+export const fetchSingleDealerController = async (req, res) => {
     try {
         let data = {};
-        data.spare_id = req.params.id
-        console.log("Request Body Received in fetchSingleSpareController",data);
-        let result = await fetchSingleSpareModel(data);
+        data.dealer_id = req.params.id
+        console.log("Request Body Received in fetchSingleDealerController",data);
+        let result = await fetchSingleDealerModel(data);
         console.log("Result--->", result)
         if(result.success){
             res.status(200).send({
@@ -54,7 +53,7 @@ export const fetchSingleSpareController = async (req, res) => {
             })
         }
     } catch (error) {
-        console.log("error occured in fetchSingleSpareController--->", error)
+        console.log("error occured in fetchSingleDealerController--->", error)
         res.status(200).send({
             success:false,
             message:"Something Went Wrong... Please try again",
@@ -64,14 +63,14 @@ export const fetchSingleSpareController = async (req, res) => {
     
 }
 
-export const addNewSpareController = async(req,res)=>{
+export const addNewDealerController = async(req,res)=>{
     try {
-        console.log("Request body received in addNewSpareController --->",req.body);
-        let response = await addNewSpareModel(req.body);
+        console.log("Request body received in addNewDealerController --->",req.body);
+        let response = await addNewDealerModel(req.body);
         
-        console.log("Add Spare Response--->",response);
+        console.log("Add Dealer Response--->",response);
         if(response.success){
-            console.log(`Spare Added Successfully`)
+            console.log(`Dealer Added Successfully`)
             res.status(200).send({
                 success:true,
                 message:response.message,
@@ -79,7 +78,7 @@ export const addNewSpareController = async(req,res)=>{
             })
         }
         else{
-            console.log("Some DB Error occured in addNewSpareController--->",response)
+            console.log("Some DB Error occured in addNewDealerController--->",response)
             if(response.error.additionalDetails.errors[0]){
                 res.status(200).send({
                     success:false,
@@ -97,7 +96,7 @@ export const addNewSpareController = async(req,res)=>{
         }
         
     } catch (error) {
-        console.log("Error occured in addNewSpareController--->",error)
+        console.log("Error occured in addNewDealerController--->",error)
         res.status(200).send({
             success:false,
             message:"Something Went Wrong... Please try again",
@@ -106,16 +105,16 @@ export const addNewSpareController = async(req,res)=>{
     }
 }
 
-export const updateSpareController = async(req,res)=>{
+export const updateDealerController = async(req,res)=>{
     try {
-        console.log("Request body received in updateSpareController --->",req.body);
-        let spare_id = req.params.id;
-        req.body.spare_id = spare_id;
-        let response = await updateSpareModel(req.body);
+        console.log("Request body received in updateDealerController --->",req.body);
+        let dealer_id = req.params.id;
+        req.body.dealer_id = dealer_id;
+        let response = await updateDealerModel(req.body);
         
-        console.log("Update Spare Response--->",response);
+        console.log("Update Dealer Response--->",response);
         if(response.success){
-            console.log(`Spare Updated Successfully`)
+            console.log(`Dealer Updated Successfully`)
             res.status(200).send({
                 success:true,
                 message:response.message,
@@ -123,7 +122,7 @@ export const updateSpareController = async(req,res)=>{
             })
         }
         else{
-            console.log("Some Error occured in updateSpareController--->",response)
+            console.log("Some Error occured in updateDealerController--->",response)
             res.status(200).send({
                 success:false,
                 message:response.message,
@@ -132,7 +131,7 @@ export const updateSpareController = async(req,res)=>{
         }
         
     } catch (error) {
-        console.log("Error occured in updateSpareController--->",error)
+        console.log("Error occured in updateDealerController--->",error)
         res.status(200).send({
             success:false,
             message:"Something Went Wrong... Please try again",
@@ -140,16 +139,16 @@ export const updateSpareController = async(req,res)=>{
         })
     }
 }
-export const deleteSpareController = async(req,res)=>{
+export const deleteDealerController = async(req,res)=>{
     try {
         let data = {}
-        data.spare_id = req.params.id;
-        console.log("Request body received in deleteSpareController --->",data);
-        let response = await deleteSpareModel(data);
+        data.dealer_id = req.params.id;
+        console.log("Request body received in deleteDealerController --->",data);
+        let response = await deleteDealerModel(data);
         
-        console.log("Delete Spare Response--->",response);
+        console.log("Delete Dealer Response--->",response);
         if(response.success){
-            console.log(`Spare Deleted Successfully`)
+            console.log(`Dealer Deleted Successfully`)
             res.status(200).send({
                 success:true,
                 message:response.message,
@@ -157,7 +156,7 @@ export const deleteSpareController = async(req,res)=>{
             })
         }
         else{
-            console.log("Some Error occured in deleteSpareController--->",response)
+            console.log("Some Error occured in deleteDealerController--->",response)
             res.status(200).send({
                 success:false,
                 message:response.message,
@@ -166,7 +165,7 @@ export const deleteSpareController = async(req,res)=>{
         }
         
     } catch (error) {
-        console.log("Error occured in deleteSpareController--->",error)
+        console.log("Error occured in deleteDealerController--->",error)
         res.status(200).send({
             success:false,
             message:"Something Went Wrong... Please try again",
