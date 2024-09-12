@@ -19,9 +19,6 @@ const Vehicle = sequelize.define('Vehicle', {
             notEmpty: {
                 msg: 'Please Provide Dealer ID'
             },
-            isAlphanumeric: {
-                msg: 'Dealer ID must be alphanumeric'
-            },
             len: {
                 args: [3, 10],
                 msg: 'Dealer ID must be between 3 and 10 characters'

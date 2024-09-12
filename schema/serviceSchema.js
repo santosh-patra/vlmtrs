@@ -19,9 +19,6 @@ const Service = sequelize.define('Service', {
             notEmpty: {
                 msg: 'Please Provide Dealer ID'
             },
-            isAlphanumeric: {
-                msg: 'Dealer ID must be alphanumeric'
-            },
             len: {
                 args: [3, 10],
                 msg: 'Dealer ID must be between 3 and 10 characters'
@@ -34,9 +31,6 @@ const Service = sequelize.define('Service', {
         validate: {
             notEmpty: {
                 msg: 'Please Provide Vehicle ID'
-            },
-            isAlphanumeric: {
-                msg: 'Vehicle ID must be alphanumeric'
             },
             len: {
                 args: [3, 10],

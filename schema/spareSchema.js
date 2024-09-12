@@ -19,9 +19,6 @@ const Spare = sequelize.define('Spare', {
             notEmpty: {
                 msg: 'Please Provide Vendor ID'
             },
-            isAlphanumeric: {
-                msg: 'Vendor ID must be alphanumeric'
-            },
             len: {
                 args: [3, 10],
                 msg: 'Vendor ID must be between 3 and 10 characters'
