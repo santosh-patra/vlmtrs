@@ -576,6 +576,9 @@ export const fetchAllVehicleModel = async (fields) => {
         let allVehicle = []
         if (result.length > 0) {
             result.forEach(res => {
+                if(res.dataValues.color_code){
+                    res.dataValues.color_code = JSON.parse(res.dataValues.color_code)
+                }
                 allVehicle.push(res.dataValues)
             })
             return ({
@@ -607,9 +610,9 @@ export const fetchSingleVehicleModel = async (fields) => {
         let result = await Vehicle.findOne({ where: { vehicle_id: fields.vehicle_id } });
         console.log("Fetch Single Vehicle result--->", result);
         if (result) {
-            // if(result.address){
-            //     result.address = JSON.parse(result.address)
-            // }
+            if(result.dataValues.color_code){
+                result.dataValues.color_code = JSON.parse(result.dataValues.color_code)
+            }
             return ({
                 success: true,
                 message: "Vehicle Details fetch Successfully",
@@ -639,9 +642,15 @@ export const addNewVehicleModel = async (fields) => {
     console.log("Data received in fetchAllVehicleModel --->", fields);
 
     try {
+        if(fields.color_code){
+            fields.color_code = JSON.stringify(fields.color_code)
+        }
         let result = await Vehicle.create(fields);
         console.log("create Vehicle result--->", result)
         if (result.uniqno == 1) {
+            if(result.dataValues.color_code){
+                result.dataValues.color_code = JSON.parse(result.dataValues.color_code)
+            }
             return ({
                 success: true,
                 message: "A New Vehicle has been Added Successfully",
@@ -680,13 +689,15 @@ export const updateVehicleModel = async (fields) => {
             updateObj.chassis_no = fields.chassis_no ? fields.chassis_no : existingVehicle.chassis_no
             updateObj.motor_no = fields.motor_no ? fields.motor_no : existingVehicle.motor_no
             updateObj.battery_no = fields.battery_no ? fields.battery_no : existingVehicle.battery_no
-            updateObj.color_code = fields.color_code ? fields.color_code : existingVehicle.color_code
+            updateObj.color_code = fields.color_code ? JSON.stringify(fields.color_code) : existingVehicle.color_code
             updateObj.mfg_date = fields.mfg_date ? fields.mfg_date : existingVehicle.mfg_date
             updateObj.model_name = fields.model_name ? fields.model_name : existingVehicle.model_name
             updateObj.barcode = fields.barcode ? fields.barcode : existingVehicle.barcode
             updateObj.batch_no = fields.batch_no ? fields.batch_no : existingVehicle.batch_no
             let updateRes = await existingVehicle.update(updateObj);
-
+            if(updateRes.dataValues.color_code){
+                updateRes.dataValues.color_code = JSON.parse(updateRes.dataValues.color_code)
+            }
             return ({
                 success: true,
                 message: "Vehicle updated Successfully",
