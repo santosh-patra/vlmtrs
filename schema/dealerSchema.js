@@ -28,6 +28,18 @@ const Dealer = sequelize.define('Dealer', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    gst: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    aadhar_card: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    pan: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

@@ -50,6 +50,10 @@ const Service = sequelize.define('Service', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    registration_no: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

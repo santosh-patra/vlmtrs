@@ -37,10 +37,10 @@ const Accessory = sequelize.define('Accessory', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    lead_time: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
+    // lead_time: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    // },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

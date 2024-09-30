@@ -28,7 +28,19 @@ const Vendor = sequelize.define('Vendor', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    batch_no: {
+    // batch_no: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    // },
+    gst: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    aadhar_card: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    pan: {
         type: DataTypes.STRING,
         allowNull: true
     },

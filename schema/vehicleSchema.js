@@ -25,10 +25,10 @@ const Vehicle = sequelize.define('Vehicle', {
             }
         }
     },
-    vin: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
+    // vin: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    // },
     chassis_no: {
         type: DataTypes.STRING,
         allowNull: true
