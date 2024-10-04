@@ -1,5 +1,6 @@
 import { errorResponse } from "../config/errorResponse.js";
-import { addNewServiceModel, deleteServiceModel, fetchAllServiceModel, fetchSingleServiceModel, updateServiceModel } from "../model/model.js";
+import { addNewServiceModel, deleteServiceModel, fetchAllServiceModel, fetchSingleimageModel, fetchSingleServiceModel, updateServiceModel } from "../model/model.js";
+import fs from 'fs';
 
 
 export const fetchServiceController = async (req, res) => {
@@ -34,7 +35,18 @@ export const fetchServiceController = async (req, res) => {
 export const fetchSingleServiceController = async (req, res) => {
     try {
         let data = {};
-        data.service_id = req.params.id
+        let s_id = req.params.id;
+        let image = '';
+        let service_id = '';
+        if (s_id.includes('+')) {
+            service_id = s_id.split('+')[0]
+            image = s_id.split('+')[1]
+        }
+        else {
+            service_id = s_id
+        }
+        data.service_id = service_id;
+        data.image = image;
         console.log("Request Body Received in fetchSingleServiceController",data);
         let result = await fetchSingleServiceModel(data);
         console.log("Result--->", result)
@@ -62,10 +74,49 @@ export const fetchSingleServiceController = async (req, res) => {
     }
     
 }
+export const fetchSingleimageController = async (req, res) => {
+    try {
+        let data = {};
+        data.filename = req.params.f_name;
+        console.log("Request Body Received in fetchSingleimageController",data);
+        let result = await fetchSingleimageModel(data);
+        // console.log("Result--->", result)
+        if(result.success){
+            res.set('Content-Type', result.data.mimeType);
+            res.send(result.data.data);
+        }
+        else{
+            res.status(200).send({
+                success:false,
+                message:result.message,
+                error:result.error
+            })
+        }
+    } catch (error) {
+        console.log("error occured in fetchSingleimageController--->", error)
+        res.status(200).send({
+            success:false,
+            message:"Something Went Wrong... Please try again",
+            error:errorResponse(1,error.message,error)
+        })
+    }
+    
+}
 
 export const addNewServiceController = async(req,res)=>{
     try {
-        console.log("Request body received in addNewServiceController --->",req.body);
+        // console.log("Document --->",req.files);
+        console.log("Request body received in addNewServiceController --->",req.fields);
+        req.body = {...req.fields}
+        console.log("Request Body---->",req.body)
+        if(req.files.doc){
+            const imageData = fs.readFileSync(req.files.doc.path);
+            req.body.filename = `${Date.now()}+${req.files.doc.name}`,
+            req.body.data = imageData,
+            req.body.mimeType = req.files.doc.type
+        }
+        // console.log("Request Body after Document---->",req.body)
+
         let response = await addNewServiceModel(req.body);
         
         console.log("Add Service Response--->",response);

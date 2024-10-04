@@ -54,6 +54,28 @@ const Service = sequelize.define('Service', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    parts: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    discounts: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    /* To store raw Image Start */
+    filename: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    data: {
+        type: DataTypes.BLOB('long'), // Store the raw image data as BLOB
+        allowNull: true,
+    },
+    mimeType: {
+        type: DataTypes.STRING, // Store the image MIME type (e.g., image/jpeg)
+        allowNull: true,
+    },
+    /* To store raw Image End */
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -78,7 +100,7 @@ const Service = sequelize.define('Service', {
             // }
             // service.service_id = `SVR${newId}`;
         },
-        afterCreate: async(service, options) => {
+        afterCreate: async (service, options) => {
             // let existingSpare = await Service.findOne({ where: { id:service.id } });
             // service.service_id = `SVR_${service.id}`;
             // let updateRes = await existingSpare.update(service.dataValues);

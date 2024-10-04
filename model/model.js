@@ -766,6 +766,7 @@ export const fetchAllServiceModel = async (fields) => {
         let allService = []
         if (result.length > 0) {
             result.forEach(res => {
+                delete res.dataValues.data
                 allService.push(res.dataValues)
             })
             return ({
@@ -795,8 +796,13 @@ export const fetchSingleServiceModel = async (fields) => {
     console.log("Data received in fetchSingleServiceModel --->", fields);
     try {
         let result = await Service.findOne({ where: { service_id: fields.service_id } });
-        console.log("Fetch Single Service result--->", result);
+        // console.log("Fetch Single Service result--->", result);
         if (result) {
+            if(fields.image.toLowerCase() !== 'image'){
+                delete result.dataValues.data
+            }
+            console.log("Fetch Single Service result--->", result.dataValues);
+
             // if(result.address){
             //     result.address = JSON.parse(result.address)
             // }
@@ -824,14 +830,47 @@ export const fetchSingleServiceModel = async (fields) => {
         })
     }
 }
+export const fetchSingleimageModel = async (fields) => {
+    console.log("Data received in fetchSingleimageModel --->", fields);
+    try {
+        let result = await Service.findOne({ where: { filename: fields.filename } });
+
+        if (result) {
+            console.log("Image Found")
+            return ({
+                success: true,
+                message: "Image fetch Successfully",
+                data: result.dataValues
+            })
+        }
+        else {
+            console.log("Image Not Found")
+            return ({
+                success: false,
+                message: "Fail ! No Image Found",
+                error: result
+            })
+        }
+
+
+    } catch (error) {
+        console.log("error occured in fetchSingleimageModel--->", error)
+        return ({
+            success: false,
+            message: "Something Went Wrong... Please try again",
+            error: errorResponse(1, error.message, error)
+        })
+    }
+}
 
 export const addNewServiceModel = async (fields) => {
-    console.log("Data received in fetchAllServiceModel --->", fields);
+    console.log("Data received in addNewServiceModel --->", fields);
 
     try {
         let result = await Service.create(fields);
         console.log("create Service result--->", result)
         if (result.uniqno == 1) {
+            delete result.dataValues.data
             return ({
                 success: true,
                 message: "A New Service has been Added Successfully",
