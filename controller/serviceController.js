@@ -109,7 +109,7 @@ export const addNewServiceController = async(req,res)=>{
         console.log("Request body received in addNewServiceController --->",req.fields);
         req.body = {...req.fields}
         console.log("Request Body---->",req.body)
-        if(req.files.doc){
+        if(req.files && req.files.doc){
             const imageData = fs.readFileSync(req.files.doc.path);
             req.body.filename = `${Date.now()}+${req.files.doc.name}`,
             req.body.data = imageData,
@@ -158,7 +158,22 @@ export const addNewServiceController = async(req,res)=>{
 
 export const updateServiceController = async(req,res)=>{
     try {
-        console.log("Request body received in updateServiceController --->",req.body);
+        // console.log("Request body received in updateServiceController --->",req.body);
+        console.log("Request body received in updateServiceController --->",req.fields);
+        req.body = {...req.fields}
+        console.log("Request Body---->",req.body)
+        if(req.files && req.files.doc){
+            const imageData = fs.readFileSync(req.files.doc.path);
+            req.body.filename = `${Date.now()}+${req.files.doc.name}`,
+            req.body.data = imageData,
+            req.body.mimeType = req.files.doc.type
+            // pass all file details to Model
+            req.body.files = req.files
+        }
+        // if(req.fields.parts){
+        //     req.body.parts = JSON.stringify(req.fields.parts)
+        // }
+        console.log("Request Body after Document---->",req.body)
         let service_id = req.params.id;
         req.body.service_id = service_id;
         let response = await updateServiceModel(req.body);

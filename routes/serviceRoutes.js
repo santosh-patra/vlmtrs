@@ -17,7 +17,7 @@ router.get('/fetch-image/:f_name',/*requireSignin,*/fetchSingleimageController)
 // add-new-Service
 router.post('/add',/*requireSignin,*/formidable(),addNewServiceController)
 // update Service by id
-router.put('/update/:id',/*requireSignin,*/updateServiceController)
+router.put('/update/:id',/*requireSignin,*/formidable(),updateServiceController)
 // delete Service by id
 router.delete('/delete/:id',/*requireSignin,*/deleteServiceController)
 

@@ -766,6 +766,9 @@ export const fetchAllServiceModel = async (fields) => {
         let allService = []
         if (result.length > 0) {
             result.forEach(res => {
+                if(res.dataValues.parts){
+                    res.dataValues.parts = JSON.parse(res.dataValues.parts)
+                }
                 delete res.dataValues.data
                 allService.push(res.dataValues)
             })
@@ -801,7 +804,11 @@ export const fetchSingleServiceModel = async (fields) => {
             if(fields.image.toLowerCase() !== 'image'){
                 delete result.dataValues.data
             }
-            console.log("Fetch Single Service result--->", result.dataValues);
+            if(result.dataValues.parts){
+                result.dataValues.parts = JSON.parse(result.dataValues.parts)
+            }
+            // console.log("Fetch Single Service result--->", result.dataValues);
+            console.log("Fetch Single Service result--->","Service Details fetch Successfully");
 
             // if(result.address){
             //     result.address = JSON.parse(result.address)
@@ -871,6 +878,9 @@ export const addNewServiceModel = async (fields) => {
         console.log("create Service result--->", result)
         if (result.uniqno == 1) {
             delete result.dataValues.data
+            if(result.dataValues.parts){
+                result.dataValues.parts = JSON.parse(result.dataValues.parts)
+            }
             return ({
                 success: true,
                 message: "A New Service has been Added Successfully",
@@ -897,20 +907,33 @@ export const addNewServiceModel = async (fields) => {
 }
 
 export const updateServiceModel = async (fields) => {
-    console.log("Data received in updateServiceModel --->", fields);
+    // console.log("Data received in updateServiceModel --->",{dealer_id,vehicle_id,service_date,description,cost,parts,discounts}=fields);
 
     try {
         let existingService = await Service.findOne({ where: { service_id: fields.service_id } });
         if (existingService) {
-            console.log("existingService Result--->", existingService.dataValues)
+            // console.log("existingService Result--->", existingService.dataValues)
             let updateObj = {};
             updateObj.dealer_id = fields.dealer_id ? fields.dealer_id : existingService.dealer_id
             updateObj.vehicle_id = fields.vehicle_id ? fields.vehicle_id : existingService.vehicle_id
             updateObj.service_date = fields.service_date ? fields.service_date : existingService.service_date
             updateObj.description = fields.description ? fields.description : existingService.description
             updateObj.cost = fields.cost ? fields.cost : existingService.cost
-            let updateRes = await existingService.update(updateObj);
+            updateObj.parts = fields.parts ? fields.parts : existingService.parts
+            updateObj.discounts = fields.discounts ? fields.discounts : existingService.discounts
+            if(fields.files && fields.files.doc){
+            updateObj.filename = fields.filename
+            updateObj.data = fields.data
+            updateObj.mimeType = fields.mimeType
+            }
 
+            let updateRes = await existingService.update(updateObj);
+            if(updateRes.dataValues.parts){
+                updateRes.dataValues.parts = JSON.parse(updateRes.dataValues.parts)
+            }
+            if(updateRes.dataValues.data){
+                delete updateRes.dataValues.data
+            }
             return ({
                 success: true,
                 message: "Service updated Successfully",
